@@ -1,7 +1,7 @@
 {
 	"manifest_version": 3,
 	"name": "YM Meta Parser",
-	"description": "Quickly view the meta tags of the web current page.",
+	"description": "Quickly view the meta tags of the current web page.",
 	"author": "Yan Metelitsa",
 	"version": "1.0.0",
 	"icons": {
