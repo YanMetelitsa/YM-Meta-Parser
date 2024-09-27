@@ -18,6 +18,7 @@ window.addEventListener( 'load', e => {
 			const parser = new DOMParser();
 			const doc    = parser.parseFromString( headHTML, 'text/html' );
 
+			/** Common */
 			if ( doc.querySelector( 'title' ) ) {
 				document.querySelector( '#title-tag' ).innerHTML = doc.querySelector( 'title' ).innerHTML;
 			}
@@ -34,6 +35,7 @@ window.addEventListener( 'load', e => {
 				document.querySelector( '#meta-robots' ).innerHTML = doc.querySelector( 'meta[ name=robots ]' ).getAttribute( 'content' );
 			}
 
+			/** Open Graph */
 			if ( doc.querySelector( 'meta[ property=og\\:title ]' ) ) {
 				document.querySelector( '#og-title' ).innerHTML = doc.querySelector( 'meta[ property=og\\:title ]' ).getAttribute( 'content' );
 			}
@@ -44,6 +46,7 @@ window.addEventListener( 'load', e => {
 				document.querySelector( '#og-image' ).innerHTML = `<img src="${doc.querySelector( 'meta[ property=og\\:image ]' ).getAttribute( 'content' )}">`;
 			}
 
+			/** Twitter */
 			if ( doc.querySelector( 'meta[ name=twitter\\:title ]' ) ) {
 				document.querySelector( '#twitter-title' ).innerHTML = doc.querySelector( 'meta[ name=twitter\\:title ]' ).getAttribute( 'content' );
 			}
@@ -52,6 +55,9 @@ window.addEventListener( 'load', e => {
 			}
 			if ( doc.querySelector( 'meta[ name=twitter\\:image ]' ) ) {
 				document.querySelector( '#twitter-image' ).innerHTML = `<img src="${doc.querySelector( 'meta[ name=twitter\\:image ]' ).getAttribute( 'content' )}">`;
+			}
+			if ( doc.querySelector( 'meta[ name=twitter\\:card ]' ) ) {
+				document.querySelector( '#twitter-card' ).innerHTML = doc.querySelector( 'meta[ name=twitter\\:card ]' ).getAttribute( 'content' );
 			}
 		});
 });
