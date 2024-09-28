@@ -20,27 +20,27 @@ window.addEventListener( 'load', e => {
 
 			/** Common */
 			if ( doc.querySelector( 'title' ) ) {
-				document.querySelector( '#title-tag' ).innerHTML = doc.querySelector( 'title' ).innerHTML;
+				document.querySelector( '#title-tag' ).innerText = doc.querySelector( 'title' ).innerText;
 			}
 			if ( doc.querySelector( 'meta[ name=title ]' ) ) {
-				document.querySelector( '#meta-title' ).innerHTML = doc.querySelector( 'meta[ name=title ]' ).getAttribute( 'content' );
+				document.querySelector( '#meta-title' ).innerText = doc.querySelector( 'meta[ name=title ]' ).getAttribute( 'content' );
 			}
 			if ( doc.querySelector( 'meta[ name=description ]' ) ) {
-				document.querySelector( '#meta-description' ).innerHTML = doc.querySelector( 'meta[ name=description ]' ).getAttribute( 'content' );
+				document.querySelector( '#meta-description' ).innerText = doc.querySelector( 'meta[ name=description ]' ).getAttribute( 'content' );
 			}
 			if ( doc.querySelector( 'link[ rel=canonical ]' ) ) {
-				document.querySelector( '#meta-canonical' ).innerHTML = doc.querySelector( 'link[ rel=canonical ]' ).getAttribute( 'href' );
+				document.querySelector( '#meta-canonical' ).innerText = doc.querySelector( 'link[ rel=canonical ]' ).getAttribute( 'href' );
 			}
 			if ( doc.querySelector( 'meta[ name=robots ]' ) ) {
-				document.querySelector( '#meta-robots' ).innerHTML = doc.querySelector( 'meta[ name=robots ]' ).getAttribute( 'content' );
+				document.querySelector( '#meta-robots' ).innerText = doc.querySelector( 'meta[ name=robots ]' ).getAttribute( 'content' );
 			}
 
 			/** Open Graph */
 			if ( doc.querySelector( 'meta[ property=og\\:title ]' ) ) {
-				document.querySelector( '#og-title' ).innerHTML = doc.querySelector( 'meta[ property=og\\:title ]' ).getAttribute( 'content' );
+				document.querySelector( '#og-title' ).innerText = doc.querySelector( 'meta[ property=og\\:title ]' ).getAttribute( 'content' );
 			}
 			if ( doc.querySelector( 'meta[ property=og\\:description ]' ) ) {
-				document.querySelector( '#og-description' ).innerHTML = doc.querySelector( 'meta[ property=og\\:description ]' ).getAttribute( 'content' );
+				document.querySelector( '#og-description' ).innerText = doc.querySelector( 'meta[ property=og\\:description ]' ).getAttribute( 'content' );
 			}
 			if ( doc.querySelector( 'meta[ property=og\\:image ]' ) ) {
 				document.querySelector( '#og-image' ).innerHTML = `<img src="${doc.querySelector( 'meta[ property=og\\:image ]' ).getAttribute( 'content' )}">`;
@@ -48,16 +48,16 @@ window.addEventListener( 'load', e => {
 
 			/** Twitter */
 			if ( doc.querySelector( 'meta[ name=twitter\\:title ]' ) ) {
-				document.querySelector( '#twitter-title' ).innerHTML = doc.querySelector( 'meta[ name=twitter\\:title ]' ).getAttribute( 'content' );
+				document.querySelector( '#twitter-title' ).innerText = doc.querySelector( 'meta[ name=twitter\\:title ]' ).getAttribute( 'content' );
 			}
 			if ( doc.querySelector( 'meta[ name=twitter\\:description ]' ) ) {
-				document.querySelector( '#twitter-description' ).innerHTML = doc.querySelector( 'meta[ name=twitter\\:description ]' ).getAttribute( 'content' );
+				document.querySelector( '#twitter-description' ).innerText = doc.querySelector( 'meta[ name=twitter\\:description ]' ).getAttribute( 'content' );
 			}
 			if ( doc.querySelector( 'meta[ name=twitter\\:image ]' ) ) {
 				document.querySelector( '#twitter-image' ).innerHTML = `<img src="${doc.querySelector( 'meta[ name=twitter\\:image ]' ).getAttribute( 'content' )}">`;
 			}
 			if ( doc.querySelector( 'meta[ name=twitter\\:card ]' ) ) {
-				document.querySelector( '#twitter-card' ).innerHTML = doc.querySelector( 'meta[ name=twitter\\:card ]' ).getAttribute( 'content' );
+				document.querySelector( '#twitter-card' ).innerText = doc.querySelector( 'meta[ name=twitter\\:card ]' ).getAttribute( 'content' );
 			}
 		});
 });
