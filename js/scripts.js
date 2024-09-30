@@ -36,6 +36,9 @@ window.addEventListener( 'load', e => {
 			}
 
 			/** Open Graph */
+			if ( doc.querySelector( 'meta[ property=og\\:site_name ]' ) ) {
+				document.querySelector( '#og-site-name' ).innerText = doc.querySelector( 'meta[ property=og\\:site_name ]' ).getAttribute( 'content' );
+			}
 			if ( doc.querySelector( 'meta[ property=og\\:title ]' ) ) {
 				document.querySelector( '#og-title' ).innerText = doc.querySelector( 'meta[ property=og\\:title ]' ).getAttribute( 'content' );
 			}
