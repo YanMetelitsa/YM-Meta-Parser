@@ -3,64 +3,162 @@
 window.addEventListener( 'load', e => {
 	chrome.tabs.query({ active: true, currentWindow: true })
 		.then( tabs => {
-			var activeTab   = tabs[ 0 ];
-			var activeTabId = activeTab.id;
-
 			return chrome.scripting.executeScript({
-				target: {
-					tabId: activeTabId,
+				target: { tabId: tabs[ 0 ].id },
+				func: () => {
+					return {
+						head: document.head.innerHTML,
+						body: document.body.innerHTML,
+					};
 				},
-				func: () => document.querySelector( 'head' ).outerHTML,
 			});
 		}).then( results => {
-			const headHTML = results[ 0 ].result;
+			/* Get HTML */
+			const HTML = results[ 0 ].result;
 
+			/* Parse DOM */
 			const parser = new DOMParser();
-			const doc    = parser.parseFromString( headHTML, 'text/html' );
+			const head   = parser.parseFromString( HTML.head, 'text/html' );
+			const body   = parser.parseFromString( HTML.body, 'text/html' );
 
-			/** Common */
-			if ( doc.querySelector( 'title' ) ) {
-				document.querySelector( '#title-tag' ).innerText = doc.querySelector( 'title' ).innerText;
-			}
-			if ( doc.querySelector( 'meta[ name=title ]' ) ) {
-				document.querySelector( '#meta-title' ).innerText = doc.querySelector( 'meta[ name=title ]' ).getAttribute( 'content' );
-			}
-			if ( doc.querySelector( 'meta[ name=description ]' ) ) {
-				document.querySelector( '#meta-description' ).innerText = doc.querySelector( 'meta[ name=description ]' ).getAttribute( 'content' );
-			}
-			if ( doc.querySelector( 'link[ rel=canonical ]' ) ) {
-				document.querySelector( '#meta-canonical' ).innerText = doc.querySelector( 'link[ rel=canonical ]' ).getAttribute( 'href' );
-			}
-			if ( doc.querySelector( 'meta[ name=robots ]' ) ) {
-				document.querySelector( '#meta-robots' ).innerText = doc.querySelector( 'meta[ name=robots ]' ).getAttribute( 'content' );
-			}
+			/* Init tests */
+			const tests = {
+				/* Common */
+				'Common': {
+					'Title Tag': {
+						element: head.querySelector( 'title' ),
+						cb: function () {
+							return this.element.innerText;
+						},
+					},
+					'Meta Title': {
+						element: head.querySelector( 'meta[ name=title ]' ),
+						cb: function () {
+							return this.element.getAttribute( 'content' );
+						},
+					},
+					'H1 Tag': {
+						element: body.querySelector( 'h1' ),
+						cb: function () {
+							return this.element.innerText;
+						},
+					},
+					'Meta Description': {
+						element: head.querySelector( 'meta[ name=description ]' ),
+						cb: function () {
+							return this.element.getAttribute( 'content' );
+						},
+					},
+					'Canonical URL': {
+						element: head.querySelector( 'link[ rel=canonical ]' ),
+						cb: function () {
+							return this.element.getAttribute( 'href' );
+						},
+					},
+					'Meta Robots': {
+						element: head.querySelector( 'meta[ name=robots ]' ),
+						cb: function () {
+							return this.element.getAttribute( 'content' );
+						},
+					},
+				},
+				'Open Graph': {
+					'Site Name': {
+						element: head.querySelector( 'meta[ property=og\\:site_name ]' ),
+						cb: function () {
+							return this.element.getAttribute( 'content' );
+						},
+					},
+					'Title': {
+						element: head.querySelector( 'meta[ property=og\\:title ]' ),
+						cb: function () {
+							return this.element.getAttribute( 'content' );
+						},
+					},
+					'Description': {
+						element: head.querySelector( 'meta[ property=og\\:description ]' ),
+						cb: function () {
+							return this.element.getAttribute( 'content' );
+						},
+					},
+					'Image': {
+						element: head.querySelector( 'meta[ property=og\\:image ]' ),
+						cb: function () {
+							return `<img src="${this.element.getAttribute( 'content' )}">`;
+						},
+					},
+				},
+				'Twitter Cards': {
+					'Title': {
+						element: head.querySelector( 'meta[ name=twitter\\:title ]' ),
+						cb: function () {
+							return this.element.getAttribute( 'content' );
+						},
+					},
+					'Description': {
+						element: head.querySelector( 'meta[ name=twitter\\:description ]' ),
+						cb: function () {
+							return this.element.getAttribute( 'content' );
+						},
+					},
+					'Card Type': {
+						element: head.querySelector( 'meta[ name=twitter\\:card ]' ),
+						cb: function () {
+							return this.element.getAttribute( 'content' );
+						},
+					},
+					'Image': {
+						element: head.querySelector( 'meta[ name=twitter\\:image ]' ),
+						cb: function () {
+							return `<img src="${this.element.getAttribute( 'content' )}">`;
+						},
+					},
+				},
+			};
 
-			/** Open Graph */
-			if ( doc.querySelector( 'meta[ property=og\\:site_name ]' ) ) {
-				document.querySelector( '#og-site-name' ).innerText = doc.querySelector( 'meta[ property=og\\:site_name ]' ).getAttribute( 'content' );
-			}
-			if ( doc.querySelector( 'meta[ property=og\\:title ]' ) ) {
-				document.querySelector( '#og-title' ).innerText = doc.querySelector( 'meta[ property=og\\:title ]' ).getAttribute( 'content' );
-			}
-			if ( doc.querySelector( 'meta[ property=og\\:description ]' ) ) {
-				document.querySelector( '#og-description' ).innerText = doc.querySelector( 'meta[ property=og\\:description ]' ).getAttribute( 'content' );
-			}
-			if ( doc.querySelector( 'meta[ property=og\\:image ]' ) ) {
-				document.querySelector( '#og-image' ).innerHTML = `<img src="${doc.querySelector( 'meta[ property=og\\:image ]' ).getAttribute( 'content' )}">`;
-			}
+			let isFirstGroup = true;
 
-			/** Twitter */
-			if ( doc.querySelector( 'meta[ name=twitter\\:title ]' ) ) {
-				document.querySelector( '#twitter-title' ).innerText = doc.querySelector( 'meta[ name=twitter\\:title ]' ).getAttribute( 'content' );
-			}
-			if ( doc.querySelector( 'meta[ name=twitter\\:description ]' ) ) {
-				document.querySelector( '#twitter-description' ).innerText = doc.querySelector( 'meta[ name=twitter\\:description ]' ).getAttribute( 'content' );
-			}
-			if ( doc.querySelector( 'meta[ name=twitter\\:image ]' ) ) {
-				document.querySelector( '#twitter-image' ).innerHTML = `<img src="${doc.querySelector( 'meta[ name=twitter\\:image ]' ).getAttribute( 'content' )}">`;
-			}
-			if ( doc.querySelector( 'meta[ name=twitter\\:card ]' ) ) {
-				document.querySelector( '#twitter-card' ).innerText = doc.querySelector( 'meta[ name=twitter\\:card ]' ).getAttribute( 'content' );
+			/* Loop tests */
+			for ( const [ groupName, groupTests ] of Object.entries( tests ) ) {
+				let details = document.createElement( 'details' );
+				let table   = document.createElement( 'table' );
+				let summary = document.createElement( 'summary' );
+
+				if ( isFirstGroup ) {
+					details.setAttribute( 'open', 'open' );
+				}
+
+				summary.innerText = groupName;
+
+				details.append( summary );
+
+				/* Loop group tests */
+				for ( const [ testName, test ] of Object.entries( groupTests ) ) {
+					let tr = document.createElement( 'tr' );
+					let th = document.createElement( 'th' );
+					let td = document.createElement( 'td' );
+
+					th.innerText = testName;
+					td.innerText = '–';
+
+					if ( test.element ) {
+						const result = test.cb();
+
+						if ( result.match( /^<img/ ) ) {
+							td.innerHTML = result;
+						} else {
+							td.innerText = result;
+						}
+					}
+
+					tr.append( th, td );
+					table.append( tr );
+				}
+
+				details.append( table );
+				document.body.append( details );
+
+				isFirstGroup = false;
 			}
 		});
 });
