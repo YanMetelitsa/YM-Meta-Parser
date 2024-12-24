@@ -40,7 +40,7 @@ window.addEventListener( 'load', e => {
 					'H1 Tag': {
 						element: body.querySelector( 'h1' ),
 						cb: function () {
-							return this.element.innerText;
+							return this.element.innerText.trim().replace( /[\r\n]+/gm, '' );
 						},
 					},
 					'Meta Description': {
@@ -120,6 +120,7 @@ window.addEventListener( 'load', e => {
 
 			/* Loop tests */
 			for ( const [ groupName, groupTests ] of Object.entries( tests ) ) {
+				/* Create details elements */
 				let details = document.createElement( 'details' );
 				let table   = document.createElement( 'table' );
 				let summary = document.createElement( 'summary' );
@@ -134,6 +135,7 @@ window.addEventListener( 'load', e => {
 
 				/* Loop group tests */
 				for ( const [ testName, test ] of Object.entries( groupTests ) ) {
+					/* Create row elements */
 					let tr = document.createElement( 'tr' );
 					let th = document.createElement( 'th' );
 					let td = document.createElement( 'td' );
