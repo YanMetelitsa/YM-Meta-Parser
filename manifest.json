@@ -1,9 +1,9 @@
 {
 	"manifest_version": 3,
 	"name": "YM Meta Parser",
-	"description": "Quickly view the meta tags of the current web page.",
+	"description": "Quickly view meta tags of the current web page.",
 	"author": "Yan Metelitsa",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"icons": {
 		"128": "icons/icon-128-white.png"
 	},
@@ -11,7 +11,7 @@
 		"default_icon": {
 			"128": "icons/icon-128-white.png"
 		},
-		"default_popup": "index.html"
+		"default_popup": "popup.html"
 	},
 	"permissions": [
 		"tabs",
