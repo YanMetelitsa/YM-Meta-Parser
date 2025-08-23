@@ -1,7 +1,10 @@
 'use strict';
 
 window.addEventListener( 'load', e => {
-	chrome.tabs.query({ active: true, currentWindow: true })
+	chrome.tabs.query({
+		active:        true,
+		currentWindow: true,
+	})
 		.then( tabs => {
 			return chrome.scripting.executeScript({
 				target: { tabId: tabs[ 0 ].id },
@@ -31,12 +34,6 @@ window.addEventListener( 'load', e => {
 							return this.element.innerText;
 						},
 					},
-					'Meta Title': {
-						element: head.querySelector( 'meta[ name=title ]' ),
-						cb: function () {
-							return this.element.getAttribute( 'content' );
-						},
-					},
 					'H1 Tag': {
 						element: body.querySelector( 'h1' ),
 						cb: function () {
@@ -59,6 +56,24 @@ window.addEventListener( 'load', e => {
 						element: head.querySelector( 'meta[ name=robots ]' ),
 						cb: function () {
 							return this.element.getAttribute( 'content' );
+						},
+					},
+				},
+				'Favicon': {
+					'ICO Favicon': {
+						element: head.querySelector( 'link[ rel="shortcut icon" ]' ),
+						cb: function () {
+							const isSet = this.element && this.element.getAttribute( 'href' ).endsWith( '.ico' );
+
+							return isSet ? `<img src="${this.element.getAttribute( 'href' )}"> <span>Yes</span>` : 'No';
+						},
+					},
+					'SVG Favicon': {
+						element: head.querySelector( 'link[ rel=icon ][ type="image/svg+xml" ]' ),
+						cb: function () {
+							const isSet = this.element && this.element.getAttribute( 'href' ).endsWith( '.svg' );
+
+							return isSet ? `<img src="${this.element.getAttribute( 'href' )}"> <span>Yes</span>` : 'No';
 						},
 					},
 				},
@@ -114,6 +129,22 @@ window.addEventListener( 'load', e => {
 						},
 					},
 				},
+				'Apple': {
+					'Mobile Web App Title': {
+						element: head.querySelector( 'meta[ name=apple-mobile-web-app-title ]' ),
+						cb: function () {
+							return this.element.getAttribute( 'content' );
+						},
+					},
+					'Touch Icon': {
+						element: head.querySelector( 'link[ rel=apple-touch-icon ]' ),
+						cb: function () {
+							const isSet = this.element && this.element.getAttribute( 'href' ).endsWith( '.png' );
+
+							return isSet ? `<img src="${this.element.getAttribute( 'href' )}"> <span>Yes</span>` : 'No';
+						},
+					},
+				},
 			};
 
 			let isFirstGroup = true;
@@ -144,7 +175,7 @@ window.addEventListener( 'load', e => {
 					td.innerText = '–';
 
 					if ( test.element ) {
-						const result = test.cb();
+						const result = test.cb().trim();
 
 						if ( result.match( /^<img/ ) ) {
 							td.innerHTML = result;
