@@ -47,17 +47,10 @@ table {
 				width: 100%;
 				height: auto;
 				border-radius: 3px;
-			}
 
-			&:has( img ):has( span ) {
-				padding-top: 3px;
-
-				display: flex;
-				align-items: center;
-				gap: 10px;
-
-				img {
-					width: 10%;
+				&.icon {
+					width: 15%;
+					margin-top: 4px;
 				}
 			}
 		}

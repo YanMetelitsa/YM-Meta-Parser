@@ -10,19 +10,20 @@ window.addEventListener( 'load', e => {
 				target: { tabId: tabs[ 0 ].id },
 				func: () => {
 					return {
-						head: document.head.innerHTML,
-						body: document.body.innerHTML,
+						head:   document.head.innerHTML,
+						body:   document.body.innerHTML,
+						origin: document.location.origin,
 					};
 				},
 			});
 		}).then( results => {
 			/* Get HTML */
-			const HTML = results[ 0 ].result;
+			const args = results[ 0 ].result;
 
 			/* Parse DOM */
 			const parser = new DOMParser();
-			const head   = parser.parseFromString( HTML.head, 'text/html' );
-			const body   = parser.parseFromString( HTML.body, 'text/html' );
+			const head   = parser.parseFromString( args.head, 'text/html' );
+			const body   = parser.parseFromString( args.body, 'text/html' );
 
 			/* Init tests */
 			const tests = {
@@ -61,19 +62,27 @@ window.addEventListener( 'load', e => {
 				},
 				'Favicon': {
 					'ICO Favicon': {
-						element: head.querySelector( 'link[ rel="shortcut icon" ]' ),
+						element: head.querySelector( 'link[ rel="icon" ][ type="image/x-icon" ]' ),
 						cb: function () {
-							const isSet = this.element && this.element.getAttribute( 'href' ).endsWith( '.ico' );
+							let href = this.element.getAttribute( 'href' );
 
-							return isSet ? `<img src="${this.element.getAttribute( 'href' )}"> <span>Yes</span>` : 'No';
+							if ( ! href.startsWith( args.origin ) ) {
+								href = args.origin + href;
+							}
+
+							return `<img src="${href}" class="icon">`;
 						},
 					},
 					'SVG Favicon': {
 						element: head.querySelector( 'link[ rel=icon ][ type="image/svg+xml" ]' ),
 						cb: function () {
-							const isSet = this.element && this.element.getAttribute( 'href' ).endsWith( '.svg' );
+							let href = this.element.getAttribute( 'href' );
 
-							return isSet ? `<img src="${this.element.getAttribute( 'href' )}"> <span>Yes</span>` : 'No';
+							if ( ! href.startsWith( args.origin ) ) {
+								href = args.origin + href;
+							}
+
+							return `<img src="${href}" class="icon">`;
 						},
 					},
 				},
@@ -99,7 +108,13 @@ window.addEventListener( 'load', e => {
 					'Image': {
 						element: head.querySelector( 'meta[ property=og\\:image ]' ),
 						cb: function () {
-							return `<img src="${this.element.getAttribute( 'content' )}">`;
+							let href = this.element.getAttribute( 'content' );
+
+							if ( ! href.startsWith( args.origin ) ) {
+								href = args.origin + href;
+							}
+
+							return `<img src="${href}">`;
 						},
 					},
 				},
@@ -125,7 +140,13 @@ window.addEventListener( 'load', e => {
 					'Image': {
 						element: head.querySelector( 'meta[ name=twitter\\:image ]' ),
 						cb: function () {
-							return `<img src="${this.element.getAttribute( 'content' )}">`;
+							let href = this.element.getAttribute( 'content' );
+
+							if ( ! href.startsWith( args.origin ) ) {
+								href = args.origin + href;
+							}
+
+							return `<img src="${href}">`;
 						},
 					},
 				},
@@ -139,9 +160,13 @@ window.addEventListener( 'load', e => {
 					'Touch Icon': {
 						element: head.querySelector( 'link[ rel=apple-touch-icon ]' ),
 						cb: function () {
-							const isSet = this.element && this.element.getAttribute( 'href' ).endsWith( '.png' );
+							let href = this.element.getAttribute( 'href' );
 
-							return isSet ? `<img src="${this.element.getAttribute( 'href' )}"> <span>Yes</span>` : 'No';
+							if ( ! href.startsWith( args.origin ) ) {
+								href = args.origin + href;
+							}
+
+							return `<img src="${href}" class="icon">`;
 						},
 					},
 				},
