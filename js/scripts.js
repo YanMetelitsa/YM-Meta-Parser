@@ -204,6 +204,8 @@ window.addEventListener( 'load', e => {
 
 						if ( result.match( /^<img/ ) ) {
 							td.innerHTML = result;
+							
+							td.querySelectorAll( 'img' ).forEach( img => img.title = img.src );
 						} else {
 							td.innerText = result;
 						}
